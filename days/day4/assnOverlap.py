@@ -9,9 +9,15 @@
     #create sets of each elf
     #create a intersectioning set from both elves
     #if the intersection equals either of the elfs
-        #increase count
+        #increase fullOverlap
+        #increase anyOverlap
+    #else if they intersect at all
+        #increase anyOverlap
 
 #close file
+
+
+
 
 
 import sys
@@ -20,7 +26,9 @@ data = sys.argv[1]
 
 file = open(data)
 
-result = 0
+fullOverlap = 0
+anyOverlap = 0
+
 for pair in file:
     #replaces , with - then takes out all -
     seperatedValues = '-'.join(pair.split(',')).split('-')
@@ -33,6 +41,10 @@ for pair in file:
     commonValues = set(elf1 & elf2)
 
     if commonValues == elf1 or commonValues == elf2:
-        result += 1
+        fullOverlap += 1
+        anyOverlap += 1
+    elif commonValues:
+        anyOverlap +=1
 
-print(result)
+print(fullOverlap)
+print(anyOverlap)
