@@ -26,12 +26,11 @@ sacks = []
 
 
 for rucksack in file:
-    print(rucksack)
-    print(set(rucksack))
+    sacks.append(set(rucksack.strip()))
+
     if len(sacks) == 3:
         commonItem = set(sacks[0] & sacks[1] & sacks[2])
-
-        print(commonItem)    
+        
         for item in commonItem:
             if item.isupper():
                 total += ord(item) - 38
@@ -39,10 +38,8 @@ for rucksack in file:
                 total += ord(item) - 96
 
         sacks = []
-    else:
-        sacks.append(set(rucksack))
-
-
+        
+        
 print(total)
 
 file.close()
