@@ -28,6 +28,12 @@ def is_valid_game(blue, red, green, game):
     
     return True
 
+def compute_power(game):
+    power = 1
+    for val in game.values():
+        power *= val
+    
+    return power
 
 def main():
     # from puzzle
@@ -35,14 +41,20 @@ def main():
     red = 12 
     green = 13 
 
+    possible_game_id_total = 0
+    power_sum = 0
+
     f = open("puzzle_input.txt", "r")
     game_stats = parseInput(f)
 
-    possible_game_id_total = 0
     for game, stats in game_stats.items():
         if is_valid_game(blue, red, green, stats):
             possible_game_id_total += int(game)
+        
+        power_sum += compute_power(stats)
 
     print("Possible Games ID Sum: ", possible_game_id_total)
+    print("Sum of all set Powers: ", power_sum)
+
 
 main()
