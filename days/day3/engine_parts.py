@@ -1,7 +1,6 @@
 def parseInput(file):
     schematic = []
     for line in file:
-        #TODO: add '.' to the start and end of each row
         row = ['.']
         line = line.strip()
         for i in range(len(line)):
@@ -30,32 +29,35 @@ def parseInput(file):
 
     return schematic
 
+
 def get_adj_square(row, col, schematic):
     adjacent_square = [
         #top
         schematic[row-1][col-1],
         schematic[row-1][col],
         schematic[row-1][col+1],
+        '.',
         #middle
         schematic[row][col-1],
+        '.',
         schematic[row][col+1],
+        '.',
         #bottom
         schematic[row+1][col-1],
         schematic[row+1][col],
         schematic[row+1][col+1]
     ]
-
     
-
     return adjacent_square
+
 
 def check_adjacent(loc, schematic):
     row = loc[0]
     col = loc[1]
-    possible_part_num = int(schematic[row][col])
     
     adj_square = get_adj_square(row, col, schematic)
     found_symbol = False
+
     for item in adj_square:
         if not item.isnumeric() and item != '.':
             found_symbol = True
@@ -65,9 +67,9 @@ def check_adjacent(loc, schematic):
     else:
         return False
 
+
 def sum_part_nums(schematic):
     total_part_nums = 0
-
     for i in range(len(schematic)): #each row
         j = 0
         while j < len(schematic[0]): #each column value in row
@@ -81,11 +83,53 @@ def sum_part_nums(schematic):
     return total_part_nums
 
 
+def get_gear_ratio(row, col, schematic):
+    if schematic[row][col] != '*':
+        return 0
+
+    adj_square = get_adj_square(row, col, schematic)
+    numbers_in_square = []
+    top_row = []
+    i = 0
+
+    while i < len(adj_square):
+        if adj_square[i].isnumeric():
+            numbers_in_square.append(int(adj_square[i]))
+            while i < len(adj_square) and adj_square[i].isnumeric():
+                i += 1
+        else:
+            i += 1
+    
+    if len(numbers_in_square) == 2:
+        ratio = 1
+        for item in numbers_in_square:
+            ratio *= item
+        
+        print(ratio)
+        return ratio
+
+    return 0
+
+
+def sum_gear_ratios(schematic):
+    total_gear_ratios = 0
+
+    for i in range(len(schematic)):
+        for j in range(len(schematic[0])):
+            total_gear_ratios += get_gear_ratio(i, j, schematic)
+      
+    return total_gear_ratios
+
+
 def main():
-    f = open("day3/puzzle_input.txt", "r")
+    f = open("puzzle_input.txt", "r")
     schematic = parseInput(f)
     
     total_part_nums = sum_part_nums(schematic)
     print("Total of all Part Numbers: ", total_part_nums)
+
+    total_gear_ratios = sum_gear_ratios(schematic)
+    print("Total of all Gear Ratios: ", total_gear_ratios)
+
 
 main()
